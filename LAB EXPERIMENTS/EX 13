@@ -1,0 +1,40 @@
+
+# Minimax Algorithm
+
+def minimax(depth, node, maximizing, values, max_depth):
+    # Base case: leaf node
+    if depth == max_depth:
+        return values[node]
+
+    if maximizing:
+        best = float('-inf')
+
+        for i in range(2):
+            value = minimax(
+                depth + 1, node * 2 + i,
+                False, values, max_depth
+            )
+            best = max(best, value)
+
+        return best
+
+    else:
+        best = float('inf')
+
+        for i in range(2):
+            value = minimax(
+                depth + 1, node * 2 + i,
+                True, values, max_depth
+            )
+            best = min(best, value)
+
+        return best
+
+
+# Leaf node values
+values = [3, 5, 6, 9, 1, 2, 0, -1]
+max_depth = 3
+
+result = minimax(0, 0, True, values, max_depth)
+
+print("Optimal value:", result)
