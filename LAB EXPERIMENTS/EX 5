@@ -1,0 +1,67 @@
+
+from collections import deque
+
+def is_valid(m, c):
+    # Check if the number of people is valid
+    if m < 0 or c < 0 or m > 3 or c > 3:
+        return False
+
+    # Cannibals must not outnumber missionaries
+    # on either bank, when missionaries are present
+    if m > 0 and m < c:
+        return False
+
+    mr = 3 - m
+    cr = 3 - c
+
+    if mr > 0 and mr < cr:
+        return False
+
+    return True
+
+
+def solve():
+    # State: (missionaries_left, cannibals_left, boat_position)
+    # Boat position: 0 = left, 1 = right
+    start = (3, 3, 0)
+    goal = (0, 0, 1)
+
+    moves = [
+        (1, 0),  # One missionary
+        (2, 0),  # Two missionaries
+        (0, 1),  # One cannibal
+        (0, 2),  # Two cannibals
+        (1, 1)   # One missionary and one cannibal
+    ]
+
+    queue = deque([(start, [start])])
+    visited = {start}
+
+    while queue:
+        state, path = queue.popleft()
+        m, c, boat = state
+
+        if state == goal:
+            print("Solution found:\n")
+            for step in path:
+                side = "Left" if step[2] == 0 else "Right"
+                print(f"Missionaries: {step[0]}, "
+                      f"Cannibals: {step[1]}, Boat: {side}")
+            print("\nTotal crossings:", len(path) - 1)
+            return
+
+        for dm, dc in moves:
+            if boat == 0:
+                new_state = (m - dm, c - dc, 1)
+            else:
+                new_state = (m + dm, c + dc, 0)
+
+            if (is_valid(new_state[0], new_state[1])
+                    and new_state not in visited):
+                visited.add(new_state)
+                queue.append((new_state, path + [new_state]))
+
+    print("No solution found.")
+
+
+solve()
