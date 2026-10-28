@@ -1,0 +1,12 @@
+
+% Database: Name and Date of Birth
+
+person('Arun', '2002-05-15').
+person('Priya', '2001-08-20').
+person('Rahul', '2003-12-10').
+person('Divya', '2002-03-25').
+person('Kumar', '2000-11-05').
+
+% Predicate to display a person's details
+display(Name, DOB) :-
+    person(Name, DOB).
